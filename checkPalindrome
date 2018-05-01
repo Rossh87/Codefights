@@ -1,0 +1,48 @@
+//Obvious approach is to create a reversed copy and compare to original.  Here's a few approaches:
+
+//For loops.  Some would say basic, I say classic.
+
+function checkPalindrome(inputString) {
+  let len = inputString.length - 1
+  
+  let newString = "";
+
+  for (let i = len; i >= 0; i--) {
+      newString += inputString[i];
+  }
+
+  return newString === inputString;
+}
+
+//Probably most efficient approach here:  only iterates once
+
+function checkPalindrome(inputString) {
+  const len = inputString.length - 1;
+  const mid = len/2;
+  for (let i = 0; i <= mid; i++){
+    if (inputString[0 + i] !== inputString[len - i]) {
+      return false;
+    }
+  } return true;
+}
+
+//Array approaches
+
+function checkPalindrome(inputString) {
+
+  const reversedStr = inputString.split("").reverse().join("");
+  
+  return reversedStr === inputString;
+
+}
+
+//Needlessly complicated reversal with reduce()
+
+function checkPalindrome(inputString) {
+  
+  const reversedStr = inputString.split("").reduce((outStr, char) => char + outStr, "")
+  
+  return reversedStr === inputString;
+}
+
+
