@@ -1,0 +1,8 @@
+//Decent use-case for ternary operator
+
+function centuryFromYear(year) {
+  const result = year/100;
+  return (year % 100) ?
+    Math.ceil(result) 
+    : result
+}
