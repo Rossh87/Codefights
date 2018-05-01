@@ -1,0 +1,19 @@
+// Write a function that returns the sum of two numbers.
+
+function add(a, b) {
+  return a + b;
+}
+
+//ES6
+
+const add = (a, b) => a + b;
+
+//Fun with closure
+
+const createAdder = a => b => a + b;
+
+const add2 = createAdder(2) // function definition that adds 2 to any passed parameter and returns
+
+add2(3) // returns 5
+
+add2(7) // returns 9
