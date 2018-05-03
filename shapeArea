@@ -1,0 +1,9 @@
+//This is really a geometry puzzle, not a programming challenge per se.  However, there's 1 ES6 feature worth highlighting.  Previously, exponents were handled like so:
+
+function shapeArea(n) {
+    return Math.pow(n, 2) + Math.pow(n-1, 2);
+}
+
+//These days, we calculate exponents with the following syntax:
+
+const shapeArea = n => n**2 + (n-1)**2;
