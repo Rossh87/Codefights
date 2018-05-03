@@ -1,0 +1,7 @@
+//Not much to see here.  More math than programming once again. Order of operations is important here, observe the difference between the equations in each solution.  Either equation yields correct result.
+
+function makeArrayConsecutive2(statues) {
+  return Math.max(...statues) - Math.min(...statues) - (statues.length - 1);
+}
+
+const makeArrayConsecutive2 =(statues) => Math.max(...statues) - Math.min(...statues) - statues.length + 1;
