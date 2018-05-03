@@ -1,0 +1,27 @@
+//Most basic
+
+function adjacentElementsProduct(inputArray) {
+      sumArray = []
+      for (i = 0; i < inputArray.length - 1; i++) {
+      var adjSum = inputArray[i] * inputArray[i + 1];
+      sumArray.push(adjSum);
+      }  
+      return Math.max(...sumArray);
+}
+
+//ES6 with more destructuring.  Note that reduce will return NaN as final array element, so we pop it before passing array contents as arguments to Math.max().
+
+const adjacentElementsProduct = inArr => {
+  const productsArr = inputArray.reduce((prodArr, num, i, arr) => {
+          prodArr = [...prodArr, arr[i] * arr[i+1]];
+          return prodArr;
+  }, []);
+  
+  productsArr.pop();
+  
+  return Math.max(...productsArr);
+}
+
+//As a final note, Math.max is unreliable if very large numbers of arguments are passed to it (which is what we're doing above by destructuring productsArr).  If this is a concern, identify the largest element with a combination of Math.max and reduce, like so:
+
+const largestNumberInArray = someHugeArray.reduce((tempMax, number) => Math.max(tempMax, number), 0);
