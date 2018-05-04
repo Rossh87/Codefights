@@ -1,0 +1,21 @@
+//Touchy problem because of corner cases.  The foor loop isn't flashy, but it offers several advantages, including completion in a single iteration and the ability to break the loop early if certain conditions are met.  Other approaches using filter/map and possibly .indexOf will probably underperform and be harder to read.
+
+function almostIncreasingSequence(sequence) {
+    let invalidCount = 0;
+    for (let i = 0; i < sequence.length; i++){
+        //identify problem numerals and track occurences.
+        if (sequence[i] <= sequence[i-1]) {
+            invalidCount++;
+        }
+        //break loop early if more than 1 problem area, since we can only remove 1 element and stay valid
+        if (invalidCount > 1) {
+            return false;
+        }
+        //identify problem numeral that can't be resolved by single removal
+        if (sequence[i] <= sequence[i-2] && sequence[i-1] >= sequence[i+1]){
+            return false;
+        }
+        
+    }
+    return true;
+}
