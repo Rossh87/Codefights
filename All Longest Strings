@@ -1,0 +1,44 @@
+//There are naive solutions, and then there are dumb solutions.  This is a dumb solution--don't do this (I may have done this...):
+
+//This builds an array with the length of every string in the input array.
+
+function storeLength(inputArray) {
+    var lengthArray = []
+    inputArray.forEach(function(el){
+        lengthArray.push(el.length)
+    });
+    return lengthArray;
+}
+
+//Here we use storeLength, use array method .sort to put it in descending order, and get the first element of the sorted array to determine the max length of any string in the input array.
+
+function allLongestStrings(inputArray) {
+    var outArray = [];
+    var compArray = storeLength(inputArray).sort(function(a,b) {
+        return b - a;
+    });  
+    inputArray.forEach(function (el) {
+        if (el.length === compArray[0]) {
+        outArray.push(el)
+        }
+    })
+    return outArray
+}
+
+//This is silly because all the custom functions above are awkward, long reinventions of built-in methods:
+
+const storeLength = arr => arr.map(str => str.length);
+
+const compArray = arr => Math.max(...arr);
+
+etc...
+
+//Sillier still, because there's so much superfluous logic.  Instead, we can simply:
+
+const allLongestStrings = inputArray => {
+//Get length of longest string
+  const max = inputArray.reduce((max, el) => el.length > max ? el.length : max);
+  
+//filter input array to only include strings of max length
+  return inputArray.filter(str => str.length === max);
+}
