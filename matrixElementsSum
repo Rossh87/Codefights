@@ -1,0 +1,42 @@
+//So this one iterates in-place, but it modifies the original array, which is not always preferable.
+
+function matrixElementsSum(matrix) {
+    let roomTotal=0;
+//  if the length is needed for use in a loop, it's good practice to assign that value to a variable before looping.  This way, the program is not recalculating matrix.length every time the loop increments.
+    let len = matrix.length;
+//  Use nested loops to get every index in the matrix.  i = row, j = column
+    for (let i=0; i < len; i++) {
+        for (let j=0; j < len; j++) {
+//          In every row above the last, if a cell is 0, set the one below it 0 as well.
+            if (matrix[i][j] === 0 && i < matrix.length-1) {
+                matrix[i+1][j] = 0
+//          Otherwise, add cell to the total.
+            } else {
+                roomTotal += matrix[i][j]
+            }
+        }
+    }
+    return roomTotal;
+}
+
+//Here's a neat approach that avoids modifying the array by iterating every column in vertical sequence, rather than every row in horizontal sequence.  We'll write it in ES6 syntax, for the lulz.
+
+const matrixElementsSum = matrix => {
+  let roomTotal = 0;
+  let len = matrix.length;
+  for(let j=0; j < len; j++) {
+      for(let i=0; i < len; i++) {
+//    Inner loop completes every increment each time outer loop increments once, so this version will jump from row to row in the same column, from top to bottom.  If it encounters a 0, break will cancel the remaining iterations of the 'i' loop, 'j' will increment, and execution will move to the next column over (to the right, in this case).
+        if (matrix[i][j]===0) {
+            break;
+        } else {
+            roomTotal +=matrix[i][j];
+        }
+      }
+  }
+  return roomTotal;
+}
+
+//Notice how handy
+
+
