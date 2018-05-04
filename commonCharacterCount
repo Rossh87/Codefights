@@ -1,0 +1,47 @@
+//Tricky bit here is that multiple occurences of the same letter *do* count, but only once.  The following approach addresses this difficulty by iterating through the first string, identifying exactly 1 match in the second array, and then splicing the matched letter out of the second array.  Note that .split returns a shallow copy, so we aren't modifying the inputs, even though .splice would normally do so.
+
+function commonCharacterCount(s1, s2) {
+//  First break our input strings into arrays
+    const s1array=s1.split("");
+    const s2array=s2.split("");
+    
+//  Create variable to store number of matches
+    let shared=0;
+    
+//  Loop through one array, and use indexOf with .splice to cut each matched character out of the second array so it doesn't get counted again.
+    for (i=0; i < s1array.length; i++) {
+        if (s2array.indexOf(s1array[i]) >= 0) {
+            shared++;
+            s2array.splice(s2array.indexOf(s1array[i]), 1);
+        }
+    }    
+    return shared;
+} 
+
+//If we prefer to work with strings, .replace is a good tool. If the search term passed to replace is simply a character, it will only identify the *first* match, so that's perfect for our case. Since we don't care about order here, we'll drive iteration with a for...of loop.  Note that we pass a callback to .replace to modify whatever we want outside the loop, and then return the replacement character.  Variable copyStr is created to avoid modifying the input string s2.
+
+const commonCharacterCount = (s1, s2) => {
+    let count = 0;
+    let copyStr = s2.slice();
+    for (let char of s1) {
+        copyStr = copyStr.replace(char, (match) => {
+            if (match) {
+                count++;
+                return '*'
+            }
+        });
+    }
+    return count; 
+}
+
+//Finally, to be truly fancy, we can avoid keeping a count altogether and use a regular expression to count the number of replacements made in s2:
+
+const commonCharacterCount = (s1, s2) => {
+    let copyStr = s2.slice();
+    for (let char of s1) {
+        copyStr = copyStr.replace(char, '*')
+    }
+    
+//  Here we define a RegEx that matches any character *other than* an asterisk and replaces it with an empty string, then set the       'global' flag so it matches every instance.  The length of resulting string is our answer.
+    return copyStr.replace(/[^*]/g, '').length;
+}
