@@ -1,0 +1,55 @@
+//Probably a good place to mention that Codefights likes to change the type of numeral input from number to string on occasion, so be aware of that.  Here we just have a regular old number. Clever girl.  Let's step through it:
+
+function isLucky(n){
+//  First, we turn the input number into a string.  This gives it a 'length' property, which we need.
+    const numStr = String(n);
+    
+//  Get the length and midpoint, so we know when to start summing the back half of the number string.
+    const mid = numStr.length/2;
+    const len = numStr.length;
+    
+//  Track the sum of front and back halves of number string.
+    let front = 0;
+    let back = 0;
+    
+//  Iterate through the string's characters and set a condition based on the character's index that determines whether to add it to the 'front' total or the 'back' total.
+    for (let i = 0; i < len; i++){
+    
+//  IMPORTANT:  Read the docs before working with parseInt, or really any type-conversion method in javascript.  There are *many*   //unintuitive behaviors and corner cases.  Always specify the desired base of output (10, in this case).
+        const num = parseInt(numStr[i], 10);
+        if (i < mid){
+            front += num;
+        } else {
+            back += num;
+        }
+    }
+    return front===back;
+}
+
+//Let's see if we can drive it into the ground with some higher-order methods:
+
+const isLucky = n => {
+    const numStr = String(n);
+    const mid = numStr.length/2;
+    
+//  By chaining methods, we first split the string of numerals into an array, 
+    const sums = numStr.split('')
+    
+//  Then convert each numeral *back into a number*, 
+    .map(char => parseInt(char, 10))
+    
+//  Then store the sums of the front and back halves of our new number array into the keys of an object.  Note that the ternary operator works well for these sorts of either/or cases. Don't miss the return after the conditional logic!  Each increment of higher-order array methods like reduce/filter/map/ must return something. 
+    .reduce((sums, num, i) => 
+        {
+         i < mid ? 
+           sums.front = (sums.front || 0) + num
+           : sums.back = (sums.back || 0) + num
+        return sums;
+        }
+    , {});
+    
+//  If the object 'sums' at key 'front' is the same value as key 'back', we return true.  Else, false.
+    return sums.front === sums.back;
+}
+
+//  The above is a little shorter, not necessarily better or more readable, but it's good practice.  And that's why we're here.
