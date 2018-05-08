@@ -1,0 +1,47 @@
+//The first approach that occurs is to get an array of all non-'trees', sort it to ascending order, then build a new array by incrementing through the indexes of the sorted array, checking if there's a -1 at the given index, and then pushing either -1 or the next member of the sorted array to the output array.  Like so...
+
+function sortByHeight(a) {
+    let len = a.length;
+
+//  Pushing all non-tree numerals to a new array for soring
+    let noTrees = [];
+    for (let i = 0; i < len; i++) {
+        if (a[i] !== -1) {
+            noTrees.push(a[i]);
+        };
+    };
+//  Sorting...   
+    const sorted = noTrees.sort(function(a, b) {
+        return a-b;
+    });
+
+//  And now a final loop to build the output arrray:
+    let outArr = [];
+    
+//  Since the for loop will increment regarless of whether it pushes from the sorted array or a -1, we start a separate count to track the index we're at in the sorted array.  It will only increment if a sorted number (not a tree) gets pushed.  Otherwise, the for loop would skip numbers in the sorted array.
+    let n = 0;
+    for (let i = 0; i < len; i++) {
+
+//    And here we check if the loop's position is that of a tree or a person, and push the corresponding number.
+        if (a[i] === -1) {
+            outArr.push(-1);
+        } else {
+            outArr.push(sorted[n]);
+            n++;
+        }
+    }
+    return outArr;
+}
+
+//This works, and is very explicit, but some optimizations are definitely in order.  This is a case where higher-order methods and arrow 
+functions can save a *ton* of typing.
+
+const sortByHeight = a => {
+    
+//     First, we'll create an array with only non-trees, and sort them.  From about 8 lines of code above, to one.  Thanks ECMA.
+    let sorted = a.filter(num => num !== -1).sort((a,b) => a - b);
+
+//     Now we map over the index array, either returning the original element (if it's a tree), or plucking the first element from the sorted array and returning that.  And that's it!  Two simple lines.
+    return a.map(el => el === -1 ? el : sorted.shift());
+}
+
