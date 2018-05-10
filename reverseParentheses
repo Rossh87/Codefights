@@ -1,0 +1,39 @@
+//Alright, this is gonna be a longer one.  We have recursion and regular expressions, so some explanation is in order
+
+function reverseParentheses(s) {
+
+    // This regular expression matches a string of 0 or more characters that *begins* with an opening parenthesis and *ends* with a closing parenthesis.  Note the backslash before the first parenthesis in the expression; this tells the expression to interpret the parenthesis as a *character* to match rather than a signal for special meaning.  Next, we use unescaped parentheses to tell the expression to remember whatever the parentheses contain.  Finally, the brackets with caret tell the expression to match any character *other than* an opening or closing parenthesis, and the asterisk instructs the expression to match any string of characters that meets the preceding criteria and has a length between 0 and infinity, inclusive.  Again, this expression will match a string of any characters and any length that begins with the character '(' and ends with ')'. The matched parenthesis characters will *not* be remembered, while the string that they enclose *will* be remembered. Finally, lowercase 'i' at the end of the expression makes it case-insensitive.  It will match upper or lowercase characters.
+    //     
+    const regBrax = /\(([^()]*)\)/i
+    
+    function reverseOnce (s) {
+        
+//         Here we use the regular expression defined above to get exactly one match, and assign *only the saved portion* of that match to the variable 'noParenth'.  Remember that the saved portion will be the contents of a complete set of parentheses, but not the parentheses themselves.
+        var noParenth = regBrax.exec(s)[1];
+//         Next, reverse the content.
+        noParenth = noParenth.split("").reverse().join("");
+//         Finally, replace the matched expression in the original string with the reversed content.
+        var switched = s.replace(regBrax, noParenth);
+        return switched;
+    };
+    
+//     The above is only a function definition.  The following conditional will govern its execution.  We check if 's' contains parentheses, and if it does we recursively call the whole function on the *results* of reverseOnce.  Because each call to reverseParentheses contains this same conditional, and each call to reverseOnce removes 1 set of parentheses, the recursive stack will deepen until a call to reverseParenthesis returns a string that does *not* include a parenthesis.  In that case, the 'if' conditional in the deepest call will be false, and the function will proceed to the return in line 22.  All previous recursive calls will subsequently return, and finally the first call to reverseParentheses will return our solution!
+    if (s.includes("(")) {
+        s = reverseParentheses(reverseOnce(s));
+    };
+    
+    return s;
+}
+
+//Not too long, given how much is going on, but we can take advantage of the fact that the string method 'replace' optionally accepts a function as its second parameter.  This function in turn accepts saved portions of RegEx matches as parameters, allowing us to do the following: 
+
+const reverseParentheses = s => {
+
+    const regBrax = /\(([^()]*)\)/i;
+    
+    s = s.replace(regBrax, (match, firstSaved) => firstSaved.split("").reverse().join(""));
+    
+    return s.includes("(") ? reverseParentheses(s) : s;
+    
+}
+
