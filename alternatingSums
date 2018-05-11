@@ -1,0 +1,28 @@
+//  Not much to see here.  By now whenever we have an array whose data we want to condense in a particular pattern, hopefully we think immediately of reduce. If we destructure the accumulator in reduce, we can do away with brackets and return statements entirely, which I think is pretty spicy. Just don't forget to specify the accumulator array at the end.
+
+const alternatingSums = a => 
+    a.reduce((arr, num, i) => 
+        i % 2 === 0 ?
+            [arr[0] + num, arr[1]]
+            : [arr[0], arr[1] + num]
+    , [0, 0]);
+
+
+//  If that looks like gibberish to you, don't sweat.  Here's a more explicit version that works just the same, though a couple things are *slightly* different under the hood:
+
+const alternatingSums = a => {
+    
+//     Here we need an explicit return statement, since we're using brackets with our arrow function.
+    return a.reduce((arr, num, i) => { 
+        
+//     Same logic here as above: if we're at an even index in the input array, add the number to the accumlator array at index 0, otherwise add it to the accumulator at index 1.
+        if (i % 2 === 0) {
+            arr[0] = arr[0] + num;   
+        } else {
+            arr[1] = arr[1] + num;
+        }
+        
+//     Critical:  when using brackets inside reduce, the function you define *must* return the accumulator at the end (here, 'arr').  Otherwise, reduce won't work.  Like, at all.
+        return arr;
+    }, [0, 0]);
+}
