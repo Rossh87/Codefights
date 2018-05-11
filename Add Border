@@ -1,0 +1,18 @@
+//  Another straightforward one with a few illuminating features.
+
+const addBorder = picture => {
+//     Calculate width of top and bottom border (which are strings of the character '*', then build one border of correct length using repeat.  Save border to variable
+    const width = picture[0].length + 2;
+    const topFrame = '*'.repeat(width);
+    
+//     Now, get an array of every string in 'picture' with an asterisk mashed onto the beginning and end of each string.  A string template (indicated by backticks instead of quotes) lets us compute variable values inside the string we want to return, rather than using a combination of quotes and '+' signs.
+    const sideFrames = picture.map(str => `*${str}*`);
+    
+//     Finally, return an array that begins and ends with our constructed asterisk border, and has all the strings from 'sideFrames' destructured into the middle.  If you haven't noticed yet, destructuring is super handy...
+    return [topFrame, ...sideFrames, topFrame];
+}
+
+// Just for fun, here's a solution I borrowed from CodeFights user codeedog that manages to stuff the above logic into a single line.  This works great because replace modifies and returns a *copy* of the array its called from, not the original.  That allows codeedog to use the original array 'p' again in the call to map.  This would *not* work correctly if he had altered the original in the first step.
+
+addBorder = p => [(t = p[0].replace(/./g, '*')+'**'), ...p.map(v => `*${v}*`), t];
+
