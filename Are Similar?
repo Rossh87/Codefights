@@ -1,0 +1,16 @@
+//Nothing too special here.  Note that conditionals can be nested with the ternary operator just like regular if/else syntax.
+
+const areSimilar = (a, b) => {
+//     Let's get an array of every index at which a differs from b.  We'll do this in two steps: first, map over a and return an array of its indexes.  Then, filter that array to contain only the indexes at which a & b are not identical.
+	const diffs = a.map((el, i) => i).filter(index => a[index] !== b[index]);
+    const len = diffs.length;
+    
+//     Now we do some logic.  Since we can only swap once, 'diffs' must contain exactly 2 elements, or none.  In any other case, we should return false.
+    return (len !== 2 && len !== 0) ?
+        false :
+    
+//     if we get to this point, len is either 0 or 2.  If it's 0, a and b are identical and we return true.  If it's 2, we verify that swapping the positions of the discrepant members of one array would indeed make a and b identical.  This will evaluate to either true or false, and that will be our function's output!
+    	  len === 0 ?
+        	true :
+    		  a[diffs[0]] === b[diffs[1]] && a[diffs[1]] === b[diffs[0]]
+}
