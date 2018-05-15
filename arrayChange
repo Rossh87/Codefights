@@ -1,0 +1,43 @@
+// This is as good a place as any to point up a couple features of reduce that make it distinct from its sibling array methods.  First, its callback accepts an extra parameter, the accumulator.  Unlike map, whose callback must return a substitute element for map's current position in the array upon which it was called, the callback passed to reduce must return the accumulator.  Second, we can return anything we like from reduce by explicitly declaring the accumulator after defining the callback.  Compare to map/filter, which *always* return an array.  Note that if no accumulator is specified, reduce will take the first element of the input array to be the accumulator, and begin incrementing at index position 1 of the input array.  
+
+const arrayChange = inputArray => {
+    return inputArray.reduce((diff, el, i, arr) => {
+        
+//         Little confusing here.  All we're using the accumulator (diff) for here is to keep track of how many times we have to add 1 to an element in order to obtain a strictly increasing sequence.  So, if a given element is larger than its neighbor to the right, we increase the *neighbor* element by one, and add 1 to the accumulator as a tracker. 
+        while (el >= arr[i+1]){
+            diff++;
+            arr[i+1]++;
+        };
+        return diff;
+        
+//         Notice that the accumulator is explicitly set to 0 after we define our callback.  Had we not done so, our function would take the first element of the input array (here, an integer) and use that as the accumulator.  Obviously, this would yield an incorrect result.
+    }, 0);
+};
+
+// So, nothing too radical here.  Note that the above *does* modify the input array, which isn't ideal for an info-gathering function.  One way around this is to define 2 more 'tracker' variables: one to track how many we're adding to a given array element in order to get the desired sequence (gapSum, which we reset to 0 every time reduce increments), and another (prevResult, which is set after the 'while' loop completes) to keep track of the value arrived at by the current instance of reduce's callback, so we can use it for the 'while' comparison in the *next* instance of the callback.   
+
+const arrayChange = inputArray => {
+    let gapSum = 0;
+    let prevResult = inputArray[0];
+    return inputArray.reduce((diff, el, i, arr) => {
+        gapSum = 0;
+        while (prevResult >= arr[i+1] + gapSum){
+            diff++;
+            gapSum++;
+        };
+        prevResult = arr[i+1] + gapSum;
+        return diff;
+    }, 0);
+}
+
+// If the above seems opaque to you, you're not alone.  Here's a tidier approach that crops up all the time in object-oriented frameworks like React, where directly modifying input data (i.e. mutating state) is strictly forbidden:  make a copy, and do whatever you want to it! Slice works wonders here.
+
+const arrayChange = inputArray => {
+    return inputArray.slice().reduce((diff, el, i, arr) => {
+        while (el >= arr[i+1]){
+            diff++;
+            arr[i+1]++;
+        };
+        return diff;
+    }, 0);
+}
