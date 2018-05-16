@@ -1,0 +1,28 @@
+// The temptation is to try and write a function that actually constructs a palindrome, but that's not necessary.  Two things must be true of a string that represents a potential palindrome: it includes either 0 unique characters and no more than 1 character that occurs an odd number of times, or 1 unique character and 0 characters that occur an odd number of times.  Here's one way to check those conditions without a complicated if/else tree:
+
+const palindromeRearranging = str => {
+//     First, define a RegEx that matches any word character ('\w') followed by another occurence of the same character ('\1').  If you're like me, your first instinct is to do something like this: /\w{2}/.  The problem is that this will match *any* pair of word characters, while we want to match an occurence of the *same* character twice.  The '\1' helps us by providing a reference to the first saved character in the expression.
+    const regExp = /(\w)\1/g;
+    
+//     Next, we rearrange the input string into clusters of repeated characters using sort, then replace every match of exactly 2 identical characters with an empty string, essentially deleting both characters.  All that will be left in the 'outStr' string will be unique characters (i.e. characters that occur only once in the input string), and remainder characters that occur an odd number of times in the input string.
+    const outStr = str.split("").sort().join("").replace(regExp, "");
+    
+//     Finally, check the length of outStr.  Since the input can contain exactly 1 unique character or exaclty 1 odd-occuring character, but not both, having more than 1 element in outStr returns false.
+    return (outStr.length <= 1);
+}
+
+// Here's some very different syntax for accomplishing the same set of conditional checks.
+
+const palindromeRearranging = str => {
+//     First, use reduce to construct an object with a key for each character in the input string, whose value is the number of times that character occurs.
+    const occurences = str.split("")
+        .reduce((obj, el) => {
+            obj[el] = (obj[el] | 0) + 1;
+            return obj;
+        }, {});
+    
+//     Since all we're interested in is the number of occurences of any character, we can use Object.values() to get an array of all stored keys, then filter to remove any that are even.  The length of the resulting array gives us our solution!
+    return Object.values(occurences)
+        .filter(el => el % 2 !== 0)
+        .length <= 1;
+}
