@@ -1,0 +1,13 @@
+// This is a bit of a silly one, the only difficulty is that the arm strength of one individual can be reversed and the function should still yield true.  This approach uses some basic math reasoning to get at the answer.  
+
+const areEquallyStrong = (yourLeft, yourRight, friendsLeft, friendsRight) => 
+    (yourLeft+yourRight === friendsLeft+friendsRight && Math.abs(yourLeft-yourRight) === Math.abs(friendsLeft-friendsRight));
+
+// Alternatively, a hardcore mathophobe could do something like this.  I haven't tested, but I imagine this way is less performant than the above.  However, within the constraints of this particular problem, the difference will be less-than-trivial.
+
+
+const areEquallyStrong = (yourLeft, yourRight, friendsLeft, friendsRight) => {
+    const you = [yourLeft, yourRight].sort();
+    const friend = [friendsLeft, friendsRight].sort();
+    return you.every((el, i) => el === friend[i]);
+}
