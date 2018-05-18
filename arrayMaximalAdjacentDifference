@@ -1,0 +1,11 @@
+// Any time we need to compare elements and track the outcome, reduce should come to mind. Note that using an arrow function and omitting brackets allows us to also omit a 'return' in front of reduce.  Here, this is purely a stylistic choice; however, because arrow functions do *not* estalish their own lexical context, they are not appropriate in every situation.
+
+const  arrayMaximalAdjacentDifference = arr => 
+    arr.reduce((max, el, i, inArr) => {
+        
+//         We could make this calculation inside the return statement, but I feel that moving calculations to their own variable when possible cleans up the code considerably.  This is doubly true for the ternary operator.
+        const diff = Math.abs(el - inArr[i+1]);
+        
+//         If 'diff' is greater than the accumulator, return it so that 'diff' becomes the new accumulator.  Otherwise, return the same accumulator for the next comparison.  Again, for our function to work reliably, it's critical to set the accumulator to 0 for its first pass.  It's best to explicitly set this 100% of the time, even if the default behavior meets your needs for a particular problem.  Building the habit of explicitly setting these sorts of parameters makes it easier to remember to do it when you need to, potentially avoiding some frustrating debugging.
+        return diff > max ? diff : max;
+    }, 0);
