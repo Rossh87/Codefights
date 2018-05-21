@@ -1,0 +1,14 @@
+// Edge cases make this one a little trickier than it first seems.  It's easy enough split out the decimals, but a leading decimal, *or* a double decimal, will wind up as an empty string member in the resulting array.  If we convert the array members to numbers too soon, these empty strings will get parsed as zeroes, which are valid in an IPv4 address.  So here's how we deal with that.
+ 
+const isIPv4Address = input => {
+    const numsArr = input.split(".");
+    
+//     First, check the length of the resulting array.  This will return false for an input string with 4 number substrings PLUS an extra or out-of-place decimal, as the resulting empty string element will make numsArr 1 character too long.  HOWEVER, it won't catch a bad input that has 3 number substrings and an extra/invalid decimal, as the array's length would still be 4 (e.g. an input string of '..133.12.12') 
+    return numsArr.length !== 4 ?
+        
+        false :
+    
+//     Here we screen out any empty string chars by checking their Boolean value.  Note that this conditional only works because all the elements in numsArr, *including* any zeroes, are still string characters, NOT javascript primitive numbers.  If they were numbers, this wouldn't work, as !!0 === false, while !!'0' === true.  Once we've checked for any shady business with empty strings, we then ensure each number substring represents a number in the correct range. 
+
+        numsArr.every(el =>(!!el === true && 0 <= Number(el) && 255 >= Number(el)))
+}
